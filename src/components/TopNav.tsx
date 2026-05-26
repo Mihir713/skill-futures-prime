@@ -1,5 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { connectHermesIdentity } from "@/lib/hermesAgent";
 import { Activity, LineChart, PlusCircle, Briefcase, ShieldCheck, Wallet } from "lucide-react";
+import { useState } from "react";
 
 const items = [
   { to: "/dashboard", label: "Dashboard", icon: Activity },
@@ -12,6 +14,18 @@ const items = [
 
 export function TopNav() {
   const path = useRouterState({ select: (s) => s.location.pathname });
+  const [agentStatus, setAgentStatus] = useState<"idle" | "linking" | "linked" | "offline">("idle");
+
+  const linkHermesAgent = async () => {
+    setAgentStatus("linking");
+    try {
+      await connectHermesIdentity();
+      setAgentStatus("linked");
+    } catch {
+      setAgentStatus("offline");
+    }
+  };
+
   return (
     <header className="sticky top-0 z-40 border-b border-border-subtle/80 backdrop-blur-xl bg-background/70">
       <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-6 px-6">
@@ -50,7 +64,15 @@ export function TopNav() {
             <span className="size-1.5 rounded-full bg-accent" />
             0x7A…F19c
           </div>
-          <button className="btn-primary !py-1.5 !px-3 text-[12px]">Connect Identity</button>
+          <button className="btn-primary !py-1.5 !px-3 text-[12px]" onClick={linkHermesAgent}>
+            {agentStatus === "linked"
+              ? "Hermes Linked"
+              : agentStatus === "linking"
+                ? "Linking Hermes..."
+                : agentStatus === "offline"
+                  ? "Hermes Offline"
+                  : "Connect Hermes"}
+          </button>
         </div>
       </div>
       <Ticker />

@@ -9,10 +9,12 @@ export default defineConfig({
       server: { entry: "server" },
     }),
     tailwindcss(),
-    tsconfigPaths(),
+    tsconfigPaths({
+      ignoreConfigErrors: true,
+    }),
   ],
   server: {
-    host: "0.0.0.0",
-    port: 8080,
+    host: "127.0.0.1",
+    port: 5173,
   },
 });

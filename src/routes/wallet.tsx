@@ -1,23 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { Sparkline } from "@/components/Sparkline";
+import { getHermesWallet, type HermesWalletResponse } from "@/lib/hermesAgent";
 import { makeSeries } from "@/lib/mockData";
 import { Wallet as WalletIcon, ArrowDownLeft, ArrowUpRight, Copy, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/wallet")({
   head: () => ({ meta: [{ title: "Wallet — Skill Futures" }, { name: "description", content: "Balances, transfers, and x402 settlement." }] }),
   component: WalletPage,
 });
 
-const txs = [
-  { type: "in", desc: "Settlement · INTERN-2024", amount: "+$1,420.00", time: "2h", hash: "0x9af4…2c11" },
-  { type: "out", desc: "Mint · RFE-2028", amount: "-$732.00", time: "5h", hash: "0x71b2…ee08" },
-  { type: "in", desc: "Sale · FPGA-2027 (200 ct)", amount: "+$168.00", time: "1d", hash: "0x4c0a…1ff7" },
-  { type: "out", desc: "Mint · AIML-2030", amount: "-$234.00", time: "2d", hash: "0xa12c…77b0" },
-  { type: "in", desc: "Settlement · GPA-3.7-2025", amount: "+$640.00", time: "4d", hash: "0xeec1…aa42" },
-];
+const fallbackWallet: HermesWalletResponse = {
+  balance: "$0.00",
+  delta_24h: "$0.00 · 24h",
+  address: "0x7a3f9c2b9aA1F19c",
+  transactions: [
+    { type: "in", desc: "Settlement · INTERN-2024", amount: "$0.00", time: "2h", hash: "0x9af4…2c11" },
+    { type: "out", desc: "Mint · RFE-2028", amount: "$0.00", time: "5h", hash: "0x71b2…ee08" },
+    { type: "in", desc: "Sale · FPGA-2027 (200 ct)", amount: "$0.00", time: "1d", hash: "0x4c0a…1ff7" },
+    { type: "out", desc: "Mint · AIML-2030", amount: "$0.00", time: "2d", hash: "0xa12c…77b0" },
+    { type: "in", desc: "Settlement · GPA-3.7-2025", amount: "$0.00", time: "4d", hash: "0xeec1…aa42" },
+  ],
+};
 
 function WalletPage() {
+  const [wallet, setWallet] = useState<HermesWalletResponse>(fallbackWallet);
+
+  useEffect(() => {
+    getHermesWallet().then(setWallet).catch(() => setWallet(fallbackWallet));
+  }, []);
+
   return (
     <Shell>
       <div className="mb-6">
@@ -30,11 +43,11 @@ function WalletPage() {
           <div className="absolute -top-20 -right-20 size-72 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
           <div className="flex items-center gap-2"><WalletIcon className="size-4 text-primary" /><h3 className="text-[14px] font-semibold tracking-tight">Available Balance</h3></div>
           <div className="flex items-baseline gap-3 mt-2">
-            <span className="text-5xl font-semibold tracking-tight text-num">$8,412.66</span>
-            <span className="text-mono text-sm text-success">+$214.30 · 24h</span>
+            <span className="text-5xl font-semibold tracking-tight text-num">{wallet.balance}</span>
+            <span className="text-mono text-sm text-success">{wallet.delta_24h}</span>
           </div>
           <div className="mt-2 flex items-center gap-2 text-mono text-[11px] text-muted-foreground">
-            <span>0x7a3f9c2b9aA1F19c</span>
+            <span>{wallet.address}</span>
             <button className="hover:text-foreground inline-flex items-center gap-1"><Copy className="size-3" /> copy</button>
             <span className="chip chip-neon ml-2">x402 enabled</span>
           </div>
@@ -52,9 +65,9 @@ function WalletPage() {
           <h3 className="text-[14px] font-semibold tracking-tight">Assets</h3>
           <div className="mt-3 space-y-2">
             {[
-              ["USDC", "8,412.66", "$8,412.66"],
-              ["ETH (Base)", "0.412", "$1,318.40"],
-              ["SF-LP Token", "1,204", "$2,108.00"],
+              ["USDC", "0.00", "$0.00"],
+              ["ETH (Base)", "0.000", "$0.00"],
+              ["SF-LP Token", "0", "$0.00"],
             ].map(([sym, qty, val]) => (
               <div key={sym} className="flex items-center justify-between p-2.5 rounded-md border border-border-subtle bg-background/40">
                 <div>
@@ -83,7 +96,7 @@ function WalletPage() {
               </tr>
             </thead>
             <tbody>
-              {txs.map((t, i) => {
+              {wallet.transactions.map((t, i) => {
                 const inbound = t.type === "in";
                 return (
                   <tr key={i} className="border-b border-border-subtle/60 hover:bg-surface-elevated/60 transition">

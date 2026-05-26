@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { Sparkline } from "@/components/Sparkline";
+import { mintHermesContract, type HermesMintResponse } from "@/lib/hermesAgent";
 import { makeSeries } from "@/lib/mockData";
 import { useMemo, useState } from "react";
 import { Brain, CircuitBoard, Cpu, Activity, MapPin, GraduationCap, Briefcase, Sparkles, Check, ArrowRight, Zap } from "lucide-react";
@@ -26,6 +27,8 @@ function Mint() {
   const [year, setYear] = useState("2028");
   const [industry, setIndustry] = useState("Semiconductors");
   const [region, setRegion] = useState("North America");
+  const [agentResult, setAgentResult] = useState<HermesMintResponse | null>(null);
+  const [agentStatus, setAgentStatus] = useState<"idle" | "minting" | "offline">("idle");
 
   // Deterministic AI estimate from inputs
   const ai = useMemo(() => {
@@ -46,6 +49,16 @@ function Mint() {
       series: makeSeries(p - 0.15, 32, 0.03, 0.005, Math.floor(p * 1000)),
     };
   }, [skill, salary, year, industry, region]);
+
+  const mintWithHermes = async () => {
+    setAgentStatus("minting");
+    try {
+      setAgentResult(await mintHermesContract({ skill, salary, year, industry, region }));
+      setAgentStatus("idle");
+    } catch {
+      setAgentStatus("offline");
+    }
+  };
 
   return (
     <Shell>
@@ -145,8 +158,23 @@ function Mint() {
               </p>
             </div>
 
-            <button className="btn-primary w-full mt-4">
-              <Zap className="size-4" /> Mint Contract · x402 Settlement <ArrowRight className="size-4" />
+            {agentResult ? (
+              <div className="mt-4 rounded-md border border-success/30 bg-success/10 p-3">
+                <div className="text-mono text-[10px] uppercase tracking-[0.18em] text-success">
+                  Hermes Agent · {agentResult.status} · {agentResult.symbol}
+                </div>
+                <p className="mt-1 text-[12.5px] leading-snug">{agentResult.agent_summary}</p>
+              </div>
+            ) : null}
+            {agentStatus === "offline" ? (
+              <div className="mt-4 rounded-md border border-destructive/30 bg-destructive/10 p-3 text-[12.5px] text-destructive">
+                Hermes Agent is offline. Start the backend on port 8000 and retry.
+              </div>
+            ) : null}
+            <button className="btn-primary w-full mt-4" onClick={mintWithHermes}>
+              <Zap className="size-4" />{" "}
+              {agentStatus === "minting" ? "Minting with Hermes..." : "Mint with Hermes Agent"}{" "}
+              <ArrowRight className="size-4" />
             </button>
             <div className="mt-2 flex items-center justify-center gap-3 text-mono text-[10px] text-muted-foreground">
               <span className="flex items-center gap-1"><Check className="size-3 text-success" />Gas-less</span>
