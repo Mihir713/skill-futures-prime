@@ -9,7 +9,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto max-w-[1440px] px-6 py-8 flex flex-wrap items-center justify-between gap-4 text-mono text-[11px] text-muted-foreground">
           <div className="flex items-center gap-3">
             <span className="pulse-dot" />
-            <span>Skill Futures Exchange · Regulated Sandbox · ERC-8004 Identity Layer</span>
+            <span>talentmkt Exchange · Regulated Sandbox · ERC-8004 Identity Layer</span>
           </div>
           <div className="flex gap-4">
             <span>Settlement: x402</span>

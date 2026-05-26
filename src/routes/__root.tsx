@@ -48,10 +48,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Skill Futures — Markets for Human Capital" },
+      { title: "talentmkt — Talent Markets" },
       { name: "description", content: "AI-powered futures contracts for skill trajectories and labor demand." },
-      { property: "og:title", content: "Skill Futures" },
-      { property: "og:description", content: "Markets for Human Capital." },
+      { property: "og:title", content: "talentmkt" },
+      { property: "og:description", content: "Talent Markets." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

@@ -5,7 +5,7 @@ import { credentials, settlements, makeSeries } from "@/lib/mockData";
 import { ShieldCheck, Fingerprint, CheckCircle2, Brain, Activity, Hash } from "lucide-react";
 
 export const Route = createFileRoute("/reputation")({
-  head: () => ({ meta: [{ title: "Reputation — Skill Futures" }, { name: "description", content: "Cryptographic identity and on-chain settlement history." }] }),
+  head: () => ({ meta: [{ title: "Reputation — talentmkt" }, { name: "description", content: "Cryptographic identity and on-chain settlement history." }] }),
   component: Reputation,
 });
 

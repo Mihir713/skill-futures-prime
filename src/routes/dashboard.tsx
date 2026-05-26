@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Skill Futures" }, { name: "description", content: "Your verified identity, skill graph, and live contracts." }] }),
+  head: () => ({ meta: [{ title: "Dashboard — talentmkt" }, { name: "description", content: "Your verified identity, skill graph, and live contracts." }] }),
   component: Dashboard,
 });
 
@@ -104,7 +104,7 @@ function Dashboard() {
           <div className="flex items-end justify-between pt-2">
             <div>
               <p className="text-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Live</p>
-              <h2 className="text-lg font-semibold tracking-tight">Your Skill Futures Contracts</h2>
+              <h2 className="text-lg font-semibold tracking-tight">Your talentmkt Contracts</h2>
             </div>
             <button className="text-[12px] text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
               View all <ChevronRight className="size-3.5" />

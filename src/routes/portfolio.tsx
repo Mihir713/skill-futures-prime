@@ -5,7 +5,7 @@ import { portfolioHoldings, makeSeries } from "@/lib/mockData";
 import { TrendingUp, TrendingDown, Brain } from "lucide-react";
 
 export const Route = createFileRoute("/portfolio")({
-  head: () => ({ meta: [{ title: "Portfolio — Skill Futures" }, { name: "description", content: "Your contracts, exposures, and projected payouts." }] }),
+  head: () => ({ meta: [{ title: "Portfolio — talentmkt" }, { name: "description", content: "Your contracts, exposures, and projected payouts." }] }),
   component: Portfolio,
 });
 

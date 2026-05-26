@@ -9,9 +9,9 @@ import { ArrowRight, Brain, ShieldCheck, Activity, Sparkles } from "lucide-react
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Skill Futures — Markets for Human Capital" },
+      { title: "talentmkt — Talent Markets" },
       { name: "description", content: "AI-powered futures contracts for skill trajectories and labor demand." },
-      { property: "og:title", content: "Skill Futures — Markets for Human Capital" },
+      { property: "og:title", content: "talentmkt — Talent Markets" },
       { property: "og:description", content: "Price the future of work. Mint skill futures contracts on verified credentials." },
     ],
   }),
@@ -77,7 +77,7 @@ function Index() {
                   <span className="size-2 rounded-full bg-destructive/70" />
                   <span className="size-2 rounded-full bg-warning/70" />
                   <span className="size-2 rounded-full bg-success/70" />
-                  <span className="ml-3">terminal://skillfutures/markets</span>
+                  <span className="ml-3">terminal://talentmkt/markets</span>
                 </div>
                 <div className="flex items-center gap-2 text-mono text-[11px] text-muted-foreground">
                   <span className="pulse-dot" /> LIVE FEED

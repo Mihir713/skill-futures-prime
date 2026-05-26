@@ -7,7 +7,7 @@ import { Search, TrendingUp, Flame, Gem, Telescope } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/markets")({
-  head: () => ({ meta: [{ title: "Markets — Skill Futures" }, { name: "description", content: "Live prediction markets for skill trajectories." }] }),
+  head: () => ({ meta: [{ title: "Markets — talentmkt" }, { name: "description", content: "Live prediction markets for skill trajectories." }] }),
   component: Markets,
 });
 

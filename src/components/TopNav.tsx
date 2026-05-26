@@ -2,6 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Activity, LineChart, PlusCircle, Briefcase, ShieldCheck, Wallet } from "lucide-react";
 
 const items = [
+  { to: "/agent", label: "Agent", icon: Activity },
   { to: "/dashboard", label: "Dashboard", icon: Activity },
   { to: "/markets", label: "Markets", icon: LineChart },
   { to: "/mint", label: "Mint Contract", icon: PlusCircle },
@@ -18,7 +19,7 @@ export function TopNav() {
         <Link to="/" className="flex items-center gap-2.5">
           <LogoMark />
           <div className="flex items-baseline gap-1.5">
-            <span className="text-[15px] font-semibold tracking-tight">Skill Futures</span>
+            <span className="text-[15px] font-semibold tracking-tight">talentmkt</span>
             <span className="text-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">v1.0</span>
           </div>
         </Link>

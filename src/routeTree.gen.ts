@@ -10,16 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WalletRouteImport } from './routes/wallet'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ReputationRouteImport } from './routes/reputation'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as MintRouteImport } from './routes/mint'
 import { Route as MarketsRouteImport } from './routes/markets'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as AgentRouteImport } from './routes/agent'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WalletRoute = WalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReputationRoute = ReputationRouteImport.update({
@@ -47,6 +54,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgentRoute = AgentRouteImport.update({
+  id: '/agent',
+  path: '/agent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,69 +67,83 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agent': typeof AgentRoute
   '/dashboard': typeof DashboardRoute
   '/markets': typeof MarketsRoute
   '/mint': typeof MintRoute
   '/portfolio': typeof PortfolioRoute
   '/reputation': typeof ReputationRoute
+  '/signup': typeof SignupRoute
   '/wallet': typeof WalletRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agent': typeof AgentRoute
   '/dashboard': typeof DashboardRoute
   '/markets': typeof MarketsRoute
   '/mint': typeof MintRoute
   '/portfolio': typeof PortfolioRoute
   '/reputation': typeof ReputationRoute
+  '/signup': typeof SignupRoute
   '/wallet': typeof WalletRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agent': typeof AgentRoute
   '/dashboard': typeof DashboardRoute
   '/markets': typeof MarketsRoute
   '/mint': typeof MintRoute
   '/portfolio': typeof PortfolioRoute
   '/reputation': typeof ReputationRoute
+  '/signup': typeof SignupRoute
   '/wallet': typeof WalletRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/agent'
     | '/dashboard'
     | '/markets'
     | '/mint'
     | '/portfolio'
     | '/reputation'
+    | '/signup'
     | '/wallet'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/agent'
     | '/dashboard'
     | '/markets'
     | '/mint'
     | '/portfolio'
     | '/reputation'
+    | '/signup'
     | '/wallet'
   id:
     | '__root__'
     | '/'
+    | '/agent'
     | '/dashboard'
     | '/markets'
     | '/mint'
     | '/portfolio'
     | '/reputation'
+    | '/signup'
     | '/wallet'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgentRoute: typeof AgentRoute
   DashboardRoute: typeof DashboardRoute
   MarketsRoute: typeof MarketsRoute
   MintRoute: typeof MintRoute
   PortfolioRoute: typeof PortfolioRoute
   ReputationRoute: typeof ReputationRoute
+  SignupRoute: typeof SignupRoute
   WalletRoute: typeof WalletRoute
 }
 
@@ -128,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/wallet'
       fullPath: '/wallet'
       preLoaderRoute: typeof WalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reputation': {
@@ -165,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agent': {
+      id: '/agent'
+      path: '/agent'
+      fullPath: '/agent'
+      preLoaderRoute: typeof AgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -177,11 +217,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgentRoute: AgentRoute,
   DashboardRoute: DashboardRoute,
   MarketsRoute: MarketsRoute,
   MintRoute: MintRoute,
   PortfolioRoute: PortfolioRoute,
   ReputationRoute: ReputationRoute,
+  SignupRoute: SignupRoute,
   WalletRoute: WalletRoute,
 }
 export const routeTree = rootRouteImport

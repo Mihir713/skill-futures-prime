@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { Brain, CircuitBoard, Cpu, Activity, MapPin, GraduationCap, Briefcase, Sparkles, Check, ArrowRight, Zap } from "lucide-react";
 
 export const Route = createFileRoute("/mint")({
-  head: () => ({ meta: [{ title: "Mint Contract — Skill Futures" }, { name: "description", content: "Mint a verified skill futures contract." }] }),
+  head: () => ({ meta: [{ title: "Mint Contract — talentmkt" }, { name: "description", content: "Mint a verified skill futures contract." }] }),
   component: Mint,
 });
 
