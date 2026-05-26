@@ -6,10 +6,10 @@ import { createUser, addCredential, depositCredit, buyShares, sellShares, getUse
 export const signup = createServerFn({ method: "POST" })
   .handler(async (ctx: { data: { name: string; email: string; university: string; program: string; gradYear: string; specialization: string; coopCount: number; courses: string[]; employer?: string } }) => {
     const { data } = ctx
-    const user = createUser(data)
-    addCredential(user.id, { type: "degree", issuer: data.university, status: "pending", hash: `0x${Date.now().toString(16)}` })
+    const user = await createUser(data)
+    await addCredential(user.id, { type: "degree", issuer: data.university, status: "pending", hash: `0x${Date.now().toString(16)}` })
     if (data.employer) {
-      addCredential(user.id, { type: "employment", issuer: data.employer, status: "pending" })
+      await addCredential(user.id, { type: "employment", issuer: data.employer, status: "pending" })
     }
     return { userId: user.id, erc8004: user.erc8004, bucketId: user.bucketId }
   })
@@ -19,37 +19,38 @@ export const agentDeposit = createServerFn({ method: "POST" })
     const { userId, amount, prompt } = ctx.data
     if (amount <= 0 || amount > 10000) throw new Error("Invalid amount")
     if (prompt.length < 3) throw new Error("Agent requires a prompt to process deposits")
-    // x402 payment — agent keeps 10% fee, 90% goes to user wallet
     const fee = amount * 0.1
     const netAmount = amount - fee
     const x402 = await simulateX402Payment(userId, netAmount)
     if (!x402.success) throw new Error("x402 payment failed")
-    const tx = depositCredit(userId, netAmount, `Agent deposit: "${prompt.slice(0, 50)}" — fee: $${fee.toFixed(2)} — tx: ${x402.txHash}`)
-    return { balance: getUserData(userId)?.walletBalance, tx, x402Tx: x402.txHash, fee }
+    const tx = await depositCredit(userId, netAmount, `Agent deposit: "${prompt.slice(0, 50)}" — fee: $${fee.toFixed(2)} — tx: ${x402.txHash}`)
+    const userData = await getUserData(userId)
+    return { balance: userData?.walletBalance, tx, x402Tx: x402.txHash, fee }
   })
 
 export const agentBuy = createServerFn({ method: "POST" })
   .handler(async (ctx: { data: { userId: string; bucketId: string; amount: number } }) => {
-    const result = buyShares(ctx.data.userId, ctx.data.bucketId, ctx.data.amount)
-    const user = getUserData(ctx.data.userId)
+    const result = await buyShares(ctx.data.userId, ctx.data.bucketId, ctx.data.amount)
+    const user = await getUserData(ctx.data.userId)
     return { ...result, balance: user?.walletBalance }
   })
 
 export const agentSell = createServerFn({ method: "POST" })
   .handler(async (ctx: { data: { userId: string; bucketId: string; qty: number } }) => {
-    const result = sellShares(ctx.data.userId, ctx.data.bucketId, ctx.data.qty)
-    const user = getUserData(ctx.data.userId)
+    const result = await sellShares(ctx.data.userId, ctx.data.bucketId, ctx.data.qty)
+    const user = await getUserData(ctx.data.userId)
     return { ...result, balance: user?.walletBalance }
   })
 
 export const getUser = createServerFn({ method: "GET" })
   .handler(async (ctx: { data: { userId: string } }) => {
-    return getUserData(ctx.data.userId)
+    return await getUserData(ctx.data.userId)
   })
 
 export const getBuckets = createServerFn({ method: "GET" })
   .handler(async () => {
-    return getAllBuckets().map(b => ({
+    const all = await getAllBuckets()
+    return all.map(b => ({
       id: b.id, label: b.label, category: b.category, region: b.region,
       gradYear: b.gradYear, price: b.price, studentCount: b.studentCount,
       volume24h: b.volume24h, holders: b.holders, history: b.history,
